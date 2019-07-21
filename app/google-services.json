@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "172264871011",
+    "firebase_url": "https://apu-dating.firebaseio.com",
+    "project_id": "apu-dating",
+    "storage_bucket": "apu-dating.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172264871011:android:5d10ee5f8f2cd30b",
+        "android_client_info": {
+          "package_name": "com.example.apud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172264871011-s6qm13utt6opldr5ru2k4ih5lp202r53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.apud",
+            "certificate_hash": "97c3ede0b599179d60c5f66352b6de048c0258ee"
+          }
+        },
+        {
+          "client_id": "172264871011-ufuf02aoa028fpva99v8fvkl48knv2t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU7PfjUF2KkagNRSkgKVlmNfXrPBrDl2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172264871011-ufuf02aoa028fpva99v8fvkl48knv2t5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
