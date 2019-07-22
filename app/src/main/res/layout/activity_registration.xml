@@ -7,6 +7,28 @@
     tools:context=".Registration"
     android:orientation="vertical">
 
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="name"
+        android:id="@+id/name"
+        tools:ignore="MissingConstraints" />
+    <RadioGroup
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/radioGroup">
+
+        <RadioButton
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Male"/>
+        <RadioButton
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="female"/>
+
+    </RadioGroup>
+
 
     <EditText
         android:layout_height="wrap_content"
