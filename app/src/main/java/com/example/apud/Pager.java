@@ -7,19 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Pager extends PagerAdapter {
 
-    private ArrayList<Integer> contents;
+    private ArrayList<CardDataModel> contents;
     private Context context;
 
-    public Pager(ArrayList<Integer> contents, Context context) {
+    public Pager(ArrayList<CardDataModel> contents, Context context) {
         this.contents = contents;
         this.context = context;
     }
@@ -42,7 +42,11 @@ public class Pager extends PagerAdapter {
         container.addView(view);
 
         ImageView imageView = (ImageView) view.findViewById(R.id.profilePic);
-        imageView.setImageResource(contents.get(position));
+        imageView.setImageResource(contents.get(position).getImages());
+
+        TextView textView = (TextView) view.findViewById(R.id.userName);
+        textView.setText(contents.get(position).getNames());
+
         return view;
     }
 
