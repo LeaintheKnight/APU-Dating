@@ -11,6 +11,7 @@
     <androidx.viewpager.widget.ViewPager
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/viewPager" />
+        android:id="@+id/viewPager"
+        />
 
 </LinearLayout>

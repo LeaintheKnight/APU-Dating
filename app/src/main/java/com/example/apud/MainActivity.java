@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> names = new ArrayList<String>(Arrays.asList("Gavin", "Jim"));
 
     final String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    private String userSex, oppositeSex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,38 +61,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void checkUserSex(MyCallback callback){
-        setUserGender();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Users/Male");
-        ref.addValueEventListener(new ValueEventListener() {
+        setUserGender(new MyCallback() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    names.add(ds.child("name").getValue().toString());
-                }
-                callback.onCallback(names);
-            }
+            public void onCallback(ArrayList<String> value) {
+                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference ref = database.getReference("Users/" + oppositeSex);
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                            names.add(ds.child("name").getValue().toString());
+                        }
+                        callback.onCallback(names);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    }
+                });
             }
         });
+
     }
-    public void setUserGender(){
+    public void setUserGender(MyCallback callback){
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-        DatabaseReference ref1 = database1.getReference("Users/Male");
+        DatabaseReference ref1 = database1.getReference("Users");
         ref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    if(user.equals(ds.toString())){
-                        names.add("Male");
-                    }
-                    else{
-                        names.add("Female");
-                    }
+                //names.add(ds.child("Male").child(user).getKey());
+                if (dataSnapshot.child("Male").hasChild(user)){
+                    userSex = "Male";
+                    oppositeSex = "female";
                 }
+                else{
+                    userSex = "female";
+                    oppositeSex = "Male";
+                }
+                callback.onCallback(names);
             }
 
             @Override
