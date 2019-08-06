@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,18 +45,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCallback(ArrayList<String> value) {
                 mContents = new ArrayList<CardDataModel>();
+                for(int i =0; i < 7; i++){
+                    mContents.add(new CardDataModel());
+                }
                 int images[] = {R.drawable.one, R.drawable.two, R.drawable.four, R.drawable.three};
 
-
+                int upper = 6;
+                int lower = 0;
                 for(int i = 0; i < images.length; i++){
-                    CardDataModel cardDataModel = new CardDataModel();
-                    cardDataModel.images = images[i];
-                    cardDataModel.names = names.get(i);
-                    mContents.add(cardDataModel);
+                    if(i != 3) {
+                        CardDataModel cardDataModel = new CardDataModel();
+                        cardDataModel.images = images[i];
+                        cardDataModel.names = names.get(i);
+                        mContents.set(lower, cardDataModel);
+                        mContents.set(upper, cardDataModel);
+                        upper--;
+                        lower++;
+                    }
+                    else{
+                        CardDataModel cardDataModel = new CardDataModel();
+                        cardDataModel.images = images[i];
+                        cardDataModel.names = names.get(i);
+                        mContents.set(3, cardDataModel);
+                    }
+
                 }
+
                 mAdapter = new Pager(mContents, MainActivity.this);
                 mViewPAger = (ViewPager) findViewById(R.id.viewPager);
+
                 mViewPAger.setAdapter(mAdapter);
+                mViewPAger.setCurrentItem(3);
             }
         });
 
