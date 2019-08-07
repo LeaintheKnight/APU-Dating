@@ -6,7 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".Registration"
     android:orientation="vertical">
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Login info"/>
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="email"
+        android:id="@+id/email"
+        tools:ignore="MissingConstraints" />
 
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="password"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="45dp" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Who are you?"/>
     <EditText
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -28,28 +50,48 @@
             android:text="female"/>
 
     </RadioGroup>
-
-
-    <EditText
+    <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="email"
-        android:id="@+id/email"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
+        android:text="What do you look like?"/>
+    <RelativeLayout
         android:layout_height="wrap_content"
-        android:hint="password"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="45dp" />
+        android:layout_width="match_parent"
+        android:layout_gravity="center">
 
+        <ImageView
+            android:id="@+id/userRegistrationImage"
+            android:src="@drawable/default_user"
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="107dp"
+            android:layout_marginLeft="107dp"
+            android:layout_marginEnd="104dp"
+            android:layout_marginRight="104dp" />
+
+        <ImageButton
+            android:id="@+id/addUserFoto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/userRegistrationImage"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="51dp"
+            android:layout_marginRight="51dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_add_user_foto" />
+    </RelativeLayout>
     <Button
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:text="Register"
         android:id="@+id/register"
-        tools:ignore="MissingConstraints" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
+
+
 </LinearLayout>

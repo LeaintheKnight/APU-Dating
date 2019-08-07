@@ -30,19 +30,24 @@
             android:text="Name"
             android:textSize="25sp"
             android:id="@+id/userName"
+            android:textStyle="bold"
+            android:padding="10dp"
             />
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="Location"
-            android:textSize="25sp"/>
+            android:textSize="20sp"
+            android:paddingLeft="10dp"/>
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="Occuption"
-            android:textSize="25sp"/>
+            android:textSize="20sp"
+            android:paddingLeft="10dp"
+            />
         <Button
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
