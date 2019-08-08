@@ -3,8 +3,10 @@ package com.example.apud;
 import android.Manifest;
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +18,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+
+import java.net.URI;
 
 public class Registration extends AppCompatActivity {
     private StorageReference mStorageRef;
@@ -38,8 +47,11 @@ public class Registration extends AppCompatActivity {
     private ImageView userRegistrationImage;
     private ImageButton addUserFoto;
 
+    private final int PICK_IMAGE = 100;
     private RadioGroup mRadioGroup;
+    Uri imageUri;
 
+    private StorageTask mUploadTask;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
@@ -61,7 +73,7 @@ public class Registration extends AppCompatActivity {
                 }
             }
         };
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference("Uploads/");
         addUserFoto = (ImageButton) findViewById(R.id.addUserFoto);
         userRegistrationImage = (ImageView) findViewById(R.id.userRegistrationImage);
         mRegister = (Button) findViewById(R.id.register);
@@ -101,22 +113,45 @@ public class Registration extends AppCompatActivity {
                         }
                     }
                 });
+                //String FirebaseUserId = FirebaseAuth.getInstance().getUid();
+                StorageReference storageReference = mStorageRef.child(mName.toString() + ".jpg");
+                mUploadTask = storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
             }
         });
 
         addUserFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                openGallery();
             }
         });
         checkFilePermissions();
-        //addFilePaths();
 
 
     }
 
-    private void addFilePaths() {
+    public void openGallery(){
+        Intent gallery= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            userRegistrationImage.setImageURI(imageUri);
+        }
     }
 
     @Override
