@@ -66,14 +66,14 @@ public class Registration extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    Intent intent = new Intent(Registration.this, MainActivity.class);
+                    Intent intent = new Intent(Registration.this, HomePage.class);
                     startActivity(intent);
                     finish();
                     return;
                 }
             }
         };
-        mStorageRef = FirebaseStorage.getInstance().getReference("Uploads/");
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         addUserFoto = (ImageButton) findViewById(R.id.addUserFoto);
         userRegistrationImage = (ImageView) findViewById(R.id.userRegistrationImage);
         mRegister = (Button) findViewById(R.id.register);
@@ -110,20 +110,35 @@ public class Registration extends AppCompatActivity {
                             String userId = mAuth.getCurrentUser().getUid();
                             DatabaseReference currentUserId = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId).child("name");
                             currentUserId.setValue(name);
+
+                            //String FirebaseUserId = FirebaseAuth.getInstance().getUid();
+                            StorageReference storageReference = mStorageRef.child("Users/").child(name + ".jpg");
+                            mUploadTask = storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    DatabaseReference newID = FirebaseDatabase.getInstance().getReference().child("Users").child(radioButton.getText().toString()).child(userId).child("profile-pic");
+                                    storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            Uri downloadUri = task.getResult();
+                                            newID.setValue(downloadUri.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+
                         }
-                    }
-                });
-                //String FirebaseUserId = FirebaseAuth.getInstance().getUid();
-                StorageReference storageReference = mStorageRef.child(mName.toString() + ".jpg");
-                mUploadTask = storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
                     }
                 });
             }
@@ -174,9 +189,13 @@ public class Registration extends AppCompatActivity {
 
             permissionCheck += Registration.this.checkSelfPermission("Manifest.permission.WRITE_EXTERNAL_STORAGE");
 
+            permissionCheck += Registration.this.checkSelfPermission("Manifest.permission.INTERNET");
+
+            permissionCheck += Registration.this.checkSelfPermission("Manifest.permission.ACCESS_NETWORK_STATE");
+
             if (permissionCheck != 0) {
 
-                this.requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1001); //Any number
+                this.requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE}, 1001); //Any number
 
             }
 

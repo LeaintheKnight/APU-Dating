@@ -3,6 +3,7 @@ package com.example.apud;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -14,6 +15,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -21,9 +27,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageView;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
+    private DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,10 @@ public class HomePage extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        ImageView compactImage = (ImageView) headerView.findViewById(R.id.compactImage);
+        Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/apu-dating.appspot.com/o/Users%2FAlyssa.jpg?alt=media&token=05613733-96aa-4240-8b5a-42b8a3331dd7\"").into(compactImage);
+
     }
 
     @Override

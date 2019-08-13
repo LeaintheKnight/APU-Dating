@@ -4,6 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+        //Glide dependencies
+        mavenCentral()
         
     }
     dependencies {
