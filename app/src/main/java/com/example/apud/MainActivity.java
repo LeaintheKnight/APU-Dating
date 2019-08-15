@@ -19,7 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<CardDataModel> mContents;
 
-    public ArrayList<String> names = new ArrayList<String>(Arrays.asList("Gavin", "Jim"));
+    public ArrayList<String> names = new ArrayList<String>(Arrays.asList());
 
     final String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -55,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
                 int upper = 6;
                 int lower = 0;
+                if ((names.size() == 0 || images.length == 0) && userSex == "female"){
+                    names = new ArrayList<String>(Arrays.asList("Gavin", "Jim", "Sam", "Jeff"));
+                }
+                else if ((names.size() == 0 || images.length == 0) && userSex == "Male"){
+                    names = new ArrayList<String>(Arrays.asList("Samantha", "Eliza", "Beth", "Meg"));
+                }
                 for(int i = 0; i < images.length; i++){
                     if(i != 3) {
                         CardDataModel cardDataModel = new CardDataModel();
@@ -71,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                         cardDataModel.names = names.get(i);
                         mContents.set(3, cardDataModel);
                     }
-
                 }
 
                 mAdapter = new Pager(mContents, MainActivity.this);
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     public void checkUserSex(MyCallback callback){
         setUserGender(new MyCallback() {
             @Override

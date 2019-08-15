@@ -7,8 +7,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -17,8 +20,12 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,14 +41,18 @@ public class HomePage extends AppCompatActivity
 
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser user = mAuth.getCurrentUser();
-    private DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users");
+    private String user = mAuth.getCurrentUser().getUid();
+    private String userSex = "";
+    private String userImage;
+
+    private ImageView compactImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        getUserSex();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -57,11 +68,10 @@ public class HomePage extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        ImageView compactImage = (ImageView) headerView.findViewById(R.id.compactImage);
-        Glide.with(getApplicationContext()).load("https://firebasestorage.googleapis.com/v0/b/apu-dating.appspot.com/o/Users%2FAlyssa.jpg?alt=media&token=05613733-96aa-4240-8b5a-42b8a3331dd7\"").into(compactImage);
+
 
     }
 
@@ -123,5 +133,66 @@ public class HomePage extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void getUserSex(){
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+        DatabaseReference ref1 = database1.getReference("Users");
+        ref1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //names.add(ds.child("Male").child(user).getKey());
+                if (dataSnapshot.child("Male").hasChild(user)){
+                    userSex = "Male";
+                    userImage = dataSnapshot.child(userSex).child(user).child("profile-pic").getValue().toString();
+                }
+                else{
+                    userSex = "female";
+                    userImage = dataSnapshot.child(userSex).child(user).child("profile-pic").getValue().toString();
+
+                }
+                Log.d("UserSex", userImage);
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                View headerView = navigationView.getHeaderView(0);
+                ImageView compactImage = (ImageView) headerView.findViewById(R.id.compactImage);
+                Glide.with(getApplicationContext()).load(userImage).into(compactImage);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void setUserImage(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                userImage = dataSnapshot.child(userSex).child(user).child("profile-pic").getValue().toString();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d("UserImage", userImage);
     }
 }
