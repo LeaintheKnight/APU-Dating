@@ -2,12 +2,12 @@ package com.example.apud;
 
 public class CardDataModel {
 
-    public int images;
+    public String images;
     public String names;
     public String Occupation;
     public String location;
 
-    public int getImages() {
+    public String getImages() {
         return images;
     }
 
@@ -23,7 +23,7 @@ public class CardDataModel {
         return location;
     }
 
-    public void setImages(int images) {
+    public void setImages(String images) {
         this.images = images;
     }
 

@@ -35,6 +35,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +45,7 @@ public class HomePage extends AppCompatActivity
     private String user = mAuth.getCurrentUser().getUid();
     private String userSex = "";
     private String userImage;
+    private String userName;
 
     private ImageView compactImage;
 
@@ -145,10 +147,13 @@ public class HomePage extends AppCompatActivity
                 if (dataSnapshot.child("Male").hasChild(user)){
                     userSex = "Male";
                     userImage = dataSnapshot.child(userSex).child(user).child("profile-pic").getValue().toString();
+                    userName = dataSnapshot.child(userSex).child(user).child("name").getValue().toString();
                 }
                 else{
                     userSex = "female";
                     userImage = dataSnapshot.child(userSex).child(user).child("profile-pic").getValue().toString();
+                    userName = dataSnapshot.child(userSex).child(user).child("name").getValue().toString();
+
 
                 }
                 Log.d("UserSex", userImage);
@@ -156,6 +161,8 @@ public class HomePage extends AppCompatActivity
                 View headerView = navigationView.getHeaderView(0);
                 ImageView compactImage = (ImageView) headerView.findViewById(R.id.compactImage);
                 Glide.with(getApplicationContext()).load(userImage).into(compactImage);
+                TextView compactName = (TextView) navigationView.findViewById(R.id.compactName);
+                compactName.setText(userName);
             }
 
             @Override

@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.FirebaseApp;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<CardDataModel> mContents;
 
     public ArrayList<String> names = new ArrayList<String>(Arrays.asList());
+    public ArrayList<String> images = new ArrayList<String>(Arrays.asList());
 
     final String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -50,20 +53,14 @@ public class MainActivity extends AppCompatActivity {
                 for(int i =0; i < 7; i++){
                     mContents.add(new CardDataModel());
                 }
-                int images[] = {R.drawable.one, R.drawable.two, R.drawable.four, R.drawable.three};
 
                 int upper = 6;
                 int lower = 0;
-                if ((names.size() == 0 || images.length == 0) && userSex == "female"){
-                    names = new ArrayList<String>(Arrays.asList("Gavin", "Jim", "Sam", "Jeff"));
-                }
-                else if ((names.size() == 0 || images.length == 0) && userSex == "Male"){
-                    names = new ArrayList<String>(Arrays.asList("Samantha", "Eliza", "Beth", "Meg"));
-                }
-                for(int i = 0; i < images.length; i++){
+
+                for(int i = 0; i < images.size(); i++){
                     if(i != 3) {
                         CardDataModel cardDataModel = new CardDataModel();
-                        cardDataModel.images = images[i];
+                        cardDataModel.images = images.get(i);
                         cardDataModel.names = names.get(i);
                         mContents.set(lower, cardDataModel);
                         mContents.set(upper, cardDataModel);
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
                         CardDataModel cardDataModel = new CardDataModel();
-                        cardDataModel.images = images[i];
+                        cardDataModel.images = images.get(i);
                         cardDataModel.names = names.get(i);
                         mContents.set(3, cardDataModel);
                     }
@@ -99,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot ds: dataSnapshot.getChildren()) {
                             names.add(ds.child("name").getValue().toString());
+                            images.add(ds.child("profile-pic").getValue().toString());
                         }
                         callback.onCallback(names);
                     }

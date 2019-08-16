@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class Pager extends PagerAdapter {
@@ -42,7 +44,9 @@ public class Pager extends PagerAdapter {
         container.addView(view);
 
         ImageView imageView = (ImageView) view.findViewById(R.id.profilePic);
-        imageView.setImageResource(contents.get(position).getImages());
+        //imageView.setImageResource(contents.get(position).getImages());
+        Glide.with(Pager.this.context).load(contents.get(position).getImages()).into(imageView);
+
 
         TextView textView = (TextView) view.findViewById(R.id.userName);
         textView.setText(contents.get(position).getNames());
